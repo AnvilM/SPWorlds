@@ -81,8 +81,11 @@ class API
             $payload
         );
 
+        $response = json_decode($response, true);
+        $url = $response['url'];
+
         return [
-            'response' => $response, //Ответ сервера
+            'url' => $url, //Ссылка на страницу оплаты
             'body' => $payload //Тело запроса,для верификации платежа
         ];
     }
@@ -101,7 +104,11 @@ class API
             'GET'
         );
 
-        return $response;
+        $response = json_decode($response, true);
+
+        $balance = $response['balance'];
+
+        return $balance;
     }
 
 
@@ -149,7 +156,11 @@ class API
             'GET',
         );
 
-        return $response;
+        $response = json_decode($response, true);
+
+        $username = $response['username'];
+
+        return $username;
     }
 
 
