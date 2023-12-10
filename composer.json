@@ -1,0 +1,27 @@
+{
+    "name": "anvilm/spworlds",
+    "description": "PHP library for Spworlds API",
+    "authors": [
+        {
+            "name": "AnvilM",
+            "email": "211anvil112@gmail.com"
+        }
+    ],
+    "license": "MIT",
+    "keywords": [
+        "laravel",
+        "php",
+        "SP",
+        "SPAPI",
+        "SPWORLDS"
+    ],
+    "require": {
+        "php": ">=4.0.2",
+        "ext-curl": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Anvilm\\SPWorlds\\": "src/"
+        }
+    }
+}
