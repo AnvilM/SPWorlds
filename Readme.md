@@ -5,17 +5,17 @@
 <img src="https://img.shields.io/badge/php-cUrl-green">
 </p>
 
-## Подробнее
+# Подробнее
 
 PHP Библиотека, для работы с API SPWorlds
 
-# Установка 
+## Установка 
 
 ```bash
 composer require anvilm/spworlds
 ```
 
-# Использование
+## Использование
 
 ### Инициализация объекта класса
 
