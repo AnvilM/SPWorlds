@@ -54,7 +54,7 @@ $token = '123'; //Токен карты
 $body = $response['body']; //Тело запроса платежа, его возвращает метод payment.
 
 
-$response = $SPWorlds->paymentVerify($Hash, $token, $body);
+$response = API::paymentVerify($Hash, $token, $body);
 ```
 
 ### Получить баланс карты
