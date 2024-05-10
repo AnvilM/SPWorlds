@@ -10,8 +10,14 @@ Laravel Библиотека, для работы с API SPWorlds
 
 ## Установка 
 
+С помощью Composer
 ```bash
 composer require anvilm/spworlds
+```
+
+Публикация файла конфигурации
+```bash
+php artisan vendor:publish --provider='AnvilM\SPWorlds\Providers\SPWorldsServiceProvider'
 ```
 
 ## Использование
