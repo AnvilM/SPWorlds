@@ -1,27 +1,29 @@
 {
     "name": "anvilm/spworlds",
-    "description": "PHP library for Spworlds API",
+    "type": "package",
+    "description": "Spworlds API library for Laravel",
     "authors": [
         {
             "name": "AnvilM",
             "email": "211anvil112@gmail.com"
         }
     ],
+    "keywords": ["SP", "SPWorlds", "Minecarft"],
     "license": "MIT",
-    "keywords": [
-        "laravel",
-        "php",
-        "SP",
-        "SPAPI",
-        "SPWORLDS"
-    ],
     "require": {
-        "php": ">=4.0.2",
+        "php": "^8.1",
         "ext-curl": "*"
     },
     "autoload": {
         "psr-4": {
-            "Anvilm\\SPWorlds\\": "src/"
+            "AnvilM\\SPWorlds\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "AnvilM\\SPWorlds\\Providers\\SPWorldsServiceProvider"
+            ]
         }
     }
 }

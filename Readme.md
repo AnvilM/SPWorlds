@@ -1,13 +1,12 @@
 <p align="center"><img src="logo.svg" width="400" alt="Laravel Logo"></p>
 
 <p align="center">
-<img src="https://img.shields.io/badge/php-4.0.2-blue">
-<img src="https://img.shields.io/badge/php-cUrl-green">
+<img src="https://img.shields.io/badge/PHP-8.1-blue">
 </p>
 
 # Подробнее
 
-PHP Библиотека, для работы с API SPWorlds
+Laravel Библиотека, для работы с API SPWorlds
 
 ## Установка 
 
@@ -25,70 +24,106 @@ use Anvilm\SPWorlds\API;
 $SPWorlds = new API($id, $token);
 ```
 
-### Платежи
+### Информация о карте
 
-Метод возвращает массив с сылкой на страницу оплаты и телом вашего запроса, для проверки подленности платежа
+Метод возвращает JSON строку с балансом карты и вебхуком
 
 ```php
-...
-
-$amount = 32; //Стоимость
-$redirectUrl = 'https://some.url'; //Сюда будет перенаправлен пользователь
-$webhookUrl = 'https://webhool.url'; //Сюда сервер отправит запрос после оплаты
-$data = 'some data'; //Строка до 100 символов с любой информацией
-
-$response = $SPWorlds->payment($amount, $redirectUrl, $webhookUrl, $data);
+$SPWorlds->APIService->cardInfo()
 ```
 
-### Проверка платежей
+### Получение ника пользователя
 
-Сервер отправит POST запрос на указанный в webhookUrl адрес, в хедере X-Body-Hash которого, будет закодированный в base64 SHA256 HMAC хеш тела запроса, ключ которого, токен карты.
-
-Метод возвращает true, в случае подлинности платежа, в ином случае вернёт false
+Метод возвращает JSON строку с ником и UUID
 
 ```php
-...
+$discordId = 'discord_id'; //Discord id игрока
 
-$Hash = getallheaders()['X-Body-Hash']; //Хеш, переданный с сервера
-$token = '123'; //Токен карты
-$body = $response['body']; //Тело запроса платежа, его возвращает метод payment.
-
-
-$response = API::paymentVerify($Hash, $token, $body);
+$SPWorlds->APIService->getUsername($discordId);
 ```
 
-### Получить баланс карты
+### Получение карт игрока
 
-Метод возвращает баланс игрока
+Метод возвращает JSON строку с массивом карт игрока: имя карты и номер
 
 ```php
-...
+$username = 'user_name'; //Ник игрока
 
-$response = $SPWorlds->cardBalance();
+$SPWorlds->APIService->getCards($username);
 ```
 
-### Перевод на карту
+### Получение аккаунта владельца токена
 
-Метод возвращает ответ с сервера
+Метод возвращает JSON строку с данными игрока:
+Аккаунт: id, username, minecraftUUID, status, roles, city, cards, createdAt.
+Город: id, name, description, x, z, isMayor
+Карта: id, name, number, color
 
 ```php
-...
-
-$receiver = '123'; //Номер карты получателя
-$amount = 32; //Количество АРов
-$comment = 'some comments'; //Коментарий к переводу, не обязательное поле
-
-$response = $SPWorlds->cardTransaction($receiver, $amount, $comment);
+$SPWorlds->APIService->getOwner();
 ```
 
-### Получить ник игрока
+### Оплата на вашем сайте
 
-Метод возвращает ник игрока, используя его DiscordID
+Метод возвращает JSON строку с сылкой на страницу оплаты.
+После успешной оплаты сервер отправит POST запрос на webhookUrl
 
 ```php
-...
+//Массив предметов на покупку
+$items = [
+    [
+        'name' => 'item_name', //Имя предмета
+        'count' => '10', //Количество предметов
+        'price' => '1', //Цена за штуку
+        'comment' => 'some comment' //Комментарий
+    ]
+];
 
-$DiscordID = '123'; //DiscordID игрока
+$redirectUrl = 'https://redirect.url'; //Ссылка для переадрессации пользователя
+$webhookUrl = 'https://webhook.url'; //Вебхук
 
-$response = $SPWorlds->getUsername($DiscordID);
+$data = 'some data'; //Любая информация
+
+$SPWorlds->APIService->payment($items, $redirectUrl, $webhookUrl, $data);
+```
+
+### Банковские переводы
+
+Метод возвращает JSON строку с новым балансом карты
+
+```php
+$receiver = 'receiver card'; //Номер карты получателя
+$ammount = '10'; //Сумма
+$comment = 'some comment'; //Комментарий к переводу
+
+$SPWorlds->APIService->transaction($receiver, $ammount, $comment);
+```
+
+### Изменение вебхука карты
+
+Метод возвращает JSON строку с id карты и новым вебхуком
+
+```php
+$webhook = 'https://webhook.url'; //Вебхук
+
+$SPWorlds->APIService->setWebhook($webhook);
+```
+
+### Валидация оплаты
+
+Метод возвращает true или false
+
+```php
+$body = $request->getContent(); //JSON тело запроса
+$hashHeader = $request->header('X-Body-Hash'); //Хеш тела запроса
+
+$SPWorlds->APIService->validateHash($body, $hashHeader);
+```
+
+### Токен авторизации
+
+Метод возвращает Bearer токен
+
+```php
+$SPWorlds->APIService->getAuthorization();
 ```
